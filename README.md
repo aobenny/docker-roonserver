@@ -124,6 +124,21 @@ Run the Roon container with the right privileges. Some of these are docker-relat
 If you would like to use the Roon extensions, please deploy a separate docker container for the extension manager, for example [this one](https://hub.docker.com/r/theappgineer/roon-extension-manager).
 I have not tried this myself, I do not use Roon extensions.
 
+## Sound cards on host
+
+If you want to use soundcard(s) attached to docker host, try mounting the soundcard device(s) to the roon container.
+
+Direct or via systemd:
+
+    docker run --device /dev/snd:/dev/snd ....
+
+or via compose:
+
+    devices:
+      - "/dev/snd:/dev/snd"
+
+See also issue #26.
+
 ## Backups
 
   Don't forget to backup the `roon-backups` *for real* (offsite preferably).
@@ -134,12 +149,13 @@ I have not tried this myself, I do not use Roon extensions.
 
 ## Version history
 
-  * 2023-11-03: update base image to 'debian:12-slim', dependency to libicu72
-  * 2022-04-12: update base image to 'debian:11-slim'
+  * 2025-07-11: base image is still 'debian:12-slim', as it seems to be the latest available. Image is recompiled for latest debian updates.
+  * 2023-11-03: update base image to 'debian:12-slim', dependency to libicu72.
+  * 2022-04-12: update base image to 'debian:11-slim'.
   * 2022-03-19: Fix download URL, follow redirects on download. Added specific usage scenarios in README.
   * 2021-05-24: update base image to `debian:10.9-slim` and check for shared `/app` and `/data` folders.
   * 2019-03-18: Fix example start (thanx @heapxor); add `systemd` example.
   * 2019-01-23: updated base image to `debian-9.6`
-  * 2017-08-08: created initial images based on discussion on roonlabs forum
+  * 2017-08-08: created initial images based on discussion on roonlabs forum.
 
 
