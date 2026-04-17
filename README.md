@@ -1,4 +1,39 @@
 # docker-roonserver
+
+**April 2026: DEPRECATION NOTICE**
+
+Roonlabs finally launched it's own Docker image to run Roon inside a Docker container.
+It can be found [here](https://github.com/RoonLabs/roon-docker).
+
+I strongly suggest all users of my image to migrate to the official image from Roonlabs. There will be no more updates of my image, and I will take it offline later this year.
+
+## Migration from my image to Roonlabs image
+
+On the github link above you can fill out a form which generates `docker-compose.yaml` or a shell command to start the container.
+
+You can reuse existing host volumes for music and backups.
+
+You can *not* reuse the `roon-app` and `roon-data` volumes, because they were separate in my image, but are combined in the image from Roonlabs.
+So please specify a *brand-new* docker volume for the `/Roon` folder in the above mentioned form.
+
+After that, you can copy the contents of your old `roon-data` volume to this new volume, in the command below mentioned as `roon-data-new`:
+
+    sudo docker run --rm -ti -v roon-data:/data -v roon-data-new:/new alpine cp -pr /data /new/
+
+Please doublecheck other commandline options you may have in place and the commandline options that are suggested by Roonlabs.
+
+Finally, cross fingers and start the Roon container with the new settings.
+If all went well your phone app and other clients and players should be connected to the new Roon container.
+All your sources, playlists etc should still be there.
+
+Happy listening!
+
+Steef
+
+
+
+# Old README
+
 RoonServer downloading Roon on first run
 
 This little project configures a docker image for running RoonServer.
@@ -149,6 +184,7 @@ See also issue #26.
 
 ## Version history
 
+  * 2026-04-17: Deprecation notice and migration guide towards official Roonlabs image
   * 2025-07-11: base image is still 'debian:12-slim', as it seems to be the latest available. Image is recompiled for latest debian updates.
   * 2023-11-03: update base image to 'debian:12-slim', dependency to libicu72.
   * 2022-04-12: update base image to 'debian:11-slim'.
