@@ -20,7 +20,7 @@ After that, you can copy the contents of your old `roon-data` volume to this new
 
     sudo docker run --rm -ti -v roon-data:/data -v roon-data-new:/new alpine cp -pr /data /new/
 
-Please doublecheck other commandline options you may have in place and the commandline options that are suggested by Roonlabs.
+Please doublecheck other commandline options you may have in place and the commandline options that are suggested by Roonlabs. **Please also check if you were running the production release of Roon or the earlyaccess version. The official guide from Roonlabs shows how to use the correct version.**
 
 Finally, cross fingers and start the Roon container with the new settings.
 If all went well your phone app and other clients and players should be connected to the new Roon container.
@@ -30,7 +30,36 @@ Happy listening!
 
 Steef
 
+### Update April 21 2026
 
+Roonlabs changed the internal path to the `data` folder to `database`. You will notice because the controllers won't connect to your Roon server anymore. To fix, stop Roon, move the existing `data` folder to the new location and restart Roon.
+
+    sudo docker stop roon.service
+    sudo docker run --rm -ti -v roon-data-new:/data alpine rm -rf /data/database
+    sudo docker run --rm -ti -v roon-data-new:/data alpine mv /data/data /data/database
+    sudo docker start roon.service
+
+You can verify folder structure and contents as follows:
+
+    ~$ sudo docker run --rm -ti -v roon-data-new:/data alpine ls -ls /data
+         0 drwxr-xr-x    3 root     root            24 Apr 21 06:25 app
+         0 drwxr-xr-x    5 root     root            91 Apr 21 06:25 database
+
+    ~$ sudo docker run --rm -ti -v roon-data-new:/data alpine ls -las /data/database
+         0 drwxr-xr-x    5 root     root            91 Apr 21 06:25 .
+         0 drwxr-xr-x    4 root     root            33 Apr 21 06:25 ..
+         4 -rw-r--r--    1 root     root            36 Apr 21 06:25 .rmembid
+         4 -rw-r--r--    1 root     root            80 May 15  2025 .rmembids
+         0 drwxr-xr-x    5 root     root            50 Aug  4  2021 RAATServer
+         0 drwxr-xr-x    4 root     root            34 Sep 21  2023 RoonGoer
+         0 drwxr-xr-x    8 root     root            94 Apr 21 06:25 RoonServer
+
+
+Check the controller app if your precious music collection is back online.
+
+Happy listening!
+
+Steef
 
 # Old README
 
@@ -184,6 +213,7 @@ See also issue #26.
 
 ## Version history
 
+  * 2026-04-21: Instructions to deal with path change in official Roonlabs image
   * 2026-04-17: Deprecation notice and migration guide towards official Roonlabs image
   * 2025-07-11: base image is still 'debian:12-slim', as it seems to be the latest available. Image is recompiled for latest debian updates.
   * 2023-11-03: update base image to 'debian:12-slim', dependency to libicu72.
